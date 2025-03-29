@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "devjg-fullbright",
+	"version": "${version}",
+	"name": "Fullbright",
+	"description": "The future of fullbright",
+	"authors": [
+		"DevJG"
+	],
+	"contact": {
+		"homepage": "https://discord.gg/b35rQvS"
+	},
+	"license": "MIT",
+	"icon": "assets/devjg-fullbright/FullBright.jpg",
+	"environment": "client",
+	"entrypoints": {
+		"main": [
+			"me.devjg.Fullbright"
+		],
+		"client": [
+			"me.devjg.FullbrightClient"
+		]
+	},
+	"mixins": [
+		"devjg-fullbright.mixins.json",
+		{
+			"config": "devjg-fullbright.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.16.10",
+		"minecraft": ">=1.14.0",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
