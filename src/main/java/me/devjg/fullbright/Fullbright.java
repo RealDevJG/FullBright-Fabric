@@ -1,4 +1,4 @@
-package me.devjg;
+package me.devjg.fullbright;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -8,8 +8,8 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import me.devjg.commands.FullbrightCommand;
-import me.devjg.gui.FullbrightScreen;
+import me.devjg.fullbright.commands.FullbrightCommand;
+import me.devjg.fullbright.gui.FullbrightScreen;
 
 @Environment(EnvType.CLIENT)
 public class Fullbright implements ModInitializer {
@@ -22,6 +22,7 @@ public class Fullbright implements ModInitializer {
 		LOGGER.info("Loading DevJG's FullBright Mod");
 
 		FullbrightScreen.register();
+		FullbrightHandler.register();
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> FullbrightCommand.register(dispatcher));
 	}
 }

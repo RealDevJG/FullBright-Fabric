@@ -15,21 +15,14 @@
 	"environment": "client",
 	"entrypoints": {
 		"main": [
-			"me.devjg.Fullbright"
-		],
-		"client": [
-			"me.devjg.FullbrightClient"
+			"me.devjg.fullbright.Fullbright"
 		]
 	},
 	"mixins": [
-		"devjg-fullbright.mixins.json",
-		{
-			"config": "devjg-fullbright.client.mixins.json",
-			"environment": "client"
-		}
+		"devjg-fullbright.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.16.10",
+		"fabricloader": ">=0.16.12",
 		"minecraft": ">=1.14.0",
 		"java": ">=21",
 		"fabric-api": "*"

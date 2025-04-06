@@ -1,12 +1,13 @@
-package me.devjg.gui;
+package me.devjg.fullbright.gui;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import com.mojang.brigadier.context.CommandContext;
 
-import me.devjg.Fullbright;
-import me.devjg.gui.components.FullbrightSlider;
+import me.devjg.fullbright.Fullbright;
+import me.devjg.fullbright.common.Settings;
+import me.devjg.fullbright.common.Utils;
+import me.devjg.fullbright.gui.components.FullbrightSlider;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
@@ -21,7 +22,6 @@ import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 // TODO: Instantaneous/Transitional strings
 
@@ -43,46 +43,43 @@ public class FullbrightScreen extends Screen {
     @Override
     public void init() {
         final int cornerButtonSizes = 100;
+        final int centreButtonSizes = 150;
 
-        transitionSpeedSlider = new FullbrightSlider(this.width/2 - 75, this.height/2 - 9, 150, 20, "Transition Speed", 0.0, 5.0);
+        transitionSpeedSlider = new FullbrightSlider(this.width/2 - centreButtonSizes/2, this.height/2 - 9, centreButtonSizes, 20, "Transition Speed", 0.0, 5.0);
         transitionSpeedSlider.setTooltip(Tooltip.of(Text.of("Choose how quickly you transition between brightness levels")));
 
         changeWithLightLevelButton = ButtonWidget.builder(Text.of("Change w/ Light Level: false"), button -> {
             // TODO
         })
-            .size(150, 20)
-            .position(this.width/2 - 75, height/2 + 12)
+            .size(centreButtonSizes, 20)
+            .position(this.width/2 - centreButtonSizes/2, height/2 + 13)
             .tooltip(Tooltip.of(Text.of("Enable this to automatically change brightness depending on light level")))
             .build();
 
-        discordButton = ButtonWidget.builder(Text.of("Discord"), button -> {
-            URI discordUri = null;
-            try {
-                discordUri = new URI(Fullbright.DISCORD_LINK);
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
+        notificationsButton = ButtonWidget.builder(notificationText(), button -> {
+            Settings.notifications = !Settings.notifications;
+            notificationsButton.setMessage(notificationText());
+        })
+            .size(cornerButtonSizes, 20)
+            .position(width - cornerButtonSizes - 2, height - 44)
+            .tooltip(Tooltip.of(Text.of("Enable Fullbright notifications in chat")))
+            .build();
 
-            Text discordLink = Text.literal("§8[§eFullbright§8] ").append(Text.of("Click here to join our Discord!"))
+        discordButton = ButtonWidget.builder(Text.of("Discord"), button -> {
+            URI discordUri = Utils.getUri(Fullbright.DISCORD_LINK);
+
+            Text discordLink = Text.literal("§7§nClick here to join our Discord!")
                 .setStyle(Style.EMPTY
-                    .withUnderline(true)
-                    .withColor(Formatting.GRAY)
                     .withClickEvent(new ClickEvent.OpenUrl(discordUri))
                     .withHoverEvent(new HoverEvent.ShowText(Text.of(Fullbright.DISCORD_LINK))));
 
-            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(discordLink);
+            Text discordLinkMessage = Utils.formChatMessage(discordLink);
+            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(discordLinkMessage);
+            close();
         })
             .size(cornerButtonSizes, 20)
-            .position(width - cornerButtonSizes - 1, height - 21)
+            .position(width - cornerButtonSizes - 2, height - 22)
             .tooltip(Tooltip.of(Text.of("Click here to join our discord")))
-            .build();
-
-        notificationsButton = ButtonWidget.builder(Text.of("Notifications: false"), button -> {
-            // TODO
-        })
-            .size(cornerButtonSizes, 20)
-            .position(width - cornerButtonSizes - 1, height - 42)
-            .tooltip(Tooltip.of(Text.of("Enable Fullbright notifications in chat")))
             .build();
 
         addDrawableChild(transitionSpeedSlider);
@@ -103,8 +100,12 @@ public class FullbrightScreen extends Screen {
         context.drawCenteredTextWithShadow(this.textRenderer, "Fullbright", width/4, 4 + this.textRenderer.fontHeight, fontColour);
         matrices.pop();
 
-        context.drawCenteredTextWithShadow(this.textRenderer, "Mode: Instantaneous", width/2, height/2 - this.textRenderer.fontHeight*2, fontColour);
+        context.drawCenteredTextWithShadow(this.textRenderer, "Mode: Instantaneous", width/2, height/2 - this.textRenderer.fontHeight*2 - 2, fontColour);
 	}
+
+    private static Text notificationText() {
+        return Text.of("Notifications: " + Settings.notifications);
+    }
 
     public static int openGui(CommandContext<FabricClientCommandSource> context) {
         show = true;

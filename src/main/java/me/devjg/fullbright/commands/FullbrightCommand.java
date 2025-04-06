@@ -1,8 +1,8 @@
-package me.devjg.commands;
+package me.devjg.fullbright.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 
-import me.devjg.gui.FullbrightScreen;
+import me.devjg.fullbright.gui.FullbrightScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;

@@ -1,9 +1,9 @@
 {
 	"required": true,
-	"package": "me.devjg.mixin",
+	"package": "me.devjg.fullbright.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"ExampleMixin"
+		"BypassSettingLimitsMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
